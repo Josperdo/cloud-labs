@@ -1,0 +1,35 @@
+# Personal notes / scratch
+notes/
+*.tmp
+*.bak
+
+# Azure exports and configs (may contain sensitive data)
+*.env
+*.tfvars
+*.tfstate
+*.tfstate.backup
+.terraform/
+
+# Azure CLI / credential exports
+azuredeploy.parameters.json
+*credentials*
+*secrets*
+*token*
+
+# Screenshots / media
+*.png
+*.jpg
+*.jpeg
+*.gif
+*.mp4
+
+# OS junk
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Editor junk
+.vscode/
+.idea/
+*.swp
+*.swo

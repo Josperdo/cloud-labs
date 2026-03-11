@@ -81,18 +81,6 @@ Each lab follows this structure:
 
 ---
 
-## Suggested Reading Order
-
-Start with the lab overview, then work through each step methodically:
-
-1. **Read the objective** to understand what you're learning
-2. **Do each step** in the Portal (don't skip steps, even obvious ones)
-3. **Validate** at each checkpoint
-4. **Read the key concepts** to reinforce learning
-5. **Review exam tips** before moving to the next lab
-
----
-
 ## Common Issues & Troubleshooting
 
 ### Issue: "Deployment failed" on resource creation
@@ -115,25 +103,6 @@ Start with the lab overview, then work through each step methodically:
 
 ---
 
-## Study Tips for the Exam
-
-### After Each Lab
-- Write a 1-sentence summary of the domain
-- Note 1–2 things you weren't sure about
-- Bookmark Azure Docs pages for deep dives
-
-### Before Taking the Exam
-- Review the "Key Concepts" tables from all 5 labs
-- Re-read all "Exam Tips" sections
-- Do a quick mental walkthrough of how to create each resource type
-
-### Exam Day
-- If you see a question about NSGs, think back to Lab 1's "allow/deny" logic
-- If you see RBAC questions, think about scope hierarchy from Lab 4
-- If you see KQL, remember Lab 5's `where`, `summarize`, `project` operators
-
----
-
 ## Additional Resources
 
 ### Microsoft Official
@@ -148,53 +117,3 @@ Start with the lab overview, then work through each step methodically:
 ### Community
 - [Azure Tech Community](https://techcommunity.microsoft.com/t5/azure/ct-p/Azure)
 - [Reddit: r/Azure](https://reddit.com/r/Azure)
-
----
-
-## Lab Cleanup Checklist
-
-After each lab, verify you've deleted:
-- [ ] Resource groups (this deletes everything inside)
-- [ ] Any orphaned disks (Storage → Disks)
-- [ ] Any orphaned public IPs (Networking → Public IP addresses)
-- [ ] Downloaded SSH/RDP keys (local machine)
-
-Check **Cost Analysis** → Last 7 days to confirm costs dropped to near $0.
-
----
-
-## Roadmap: What's NOT Covered
-
-These labs focus on core AZ-104 infrastructure. Not extensively covered:
-
-- **App Services & PaaS** (Azure App Service, Functions)
-- **Databases** (SQL Server, PostgreSQL, Cosmos DB) — foundational but not deep
-- **Hybrid scenarios** (Azure Stack, Arc)
-- **Advanced networking** (ExpressRoute, VPN gateways in depth)
-- **Backup & disaster recovery** (Azure Backup, Site Recovery)
-- **Cost optimization** (Reservations, Spot VMs)
-
-If you finish these 5 labs with time before the exam, dive into those topics via Microsoft Learn.
-
----
-
-## Feedback
-
-If you find errors, outdated portal paths, or unclear instructions:
-- Note the lab and step number
-- Screenshot the error or confusing UI
-- Document what you expected vs. what happened
-
-This helps improve future versions.
-
----
-
-## Good Luck! 🎯
-
-You're investing time in hands-on experience, which is the **hardest part** of exam prep. Most people skip this and wonder why they fail. You're not doing that. Stick with the labs, take your time, and trust the process.
-
-The exam will feel much more approachable after doing these.
-
----
-
-**Start with Lab 1 →** `lab-1-virtual-networks.md`

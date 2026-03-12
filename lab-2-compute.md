@@ -3,8 +3,10 @@
 ## Overview
 This lab covers creating VMs, configuring availability options (Availability Sets, Availability Zones), managed disks, and basic VM customization. You'll build a scalable, fault-tolerant VM environment.
 
-**Estimated time**: 50–70 minutes  
-**Cost**: ~$2–$5 (B-series VMs are cheap; tear down at the end)
+**Estimated time**: 50–70 minutes
+**Cost**: ~$2–$5 (tear down at the end)
+
+> **Free Trial Limitation**: B-series VMs require a quota increase and are not selectable on Azure free trial subscriptions without one. Free trial accounts also cap at **4 vCPUs per region**. This lab uses `Standard_DS1_v2` (1 vCPU) for Linux VMs and `Standard_DS2_v2` (2 vCPU) for the Windows VM — totaling 4 vCPUs, which fits within the free trial limit. If either size is unavailable in your region, open **See all sizes**, filter by vCPUs (1 or 2), and pick the cheapest available option.
 
 ---
 
@@ -43,8 +45,8 @@ This lab covers creating VMs, configuring availability options (Availability Set
    - **Region**: `East US`
    - **Image**: `Ubuntu Server 22.04 LTS - x64 Gen2`
    - **VM architecture**: `x64`
-   - **Size**: Click **See all sizes** → search `B1s` → select it
-     - *Why B1s?* Cheapest compute option, perfect for learning
+   - **Size**: Click **See all sizes** → search `DS1_v2` → select `Standard_DS1_v2`
+     - *Why DS1_v2?* 1 vCPU / 3.5 GB RAM; typically available on free trial with no quota request needed. B1s is cheaper but requires a quota increase on free trial accounts.
    - **Authentication type**: `SSH public key`
    - **Username**: `azureuser`
    - **SSH public key source**: `Generate new key pair`
@@ -114,7 +116,7 @@ This lab covers creating VMs, configuring availability options (Availability Set
    - **Virtual machine name**: `web-vm-02`
    - **Region**: `East US`
    - **Image**: `Ubuntu Server 22.04 LTS - x64 Gen2`
-   - **Size**: `B1s`
+   - **Size**: `Standard_DS1_v2`
    - **Authentication type**: `SSH public key`
    - **Username**: `azureuser`
    - **SSH public key source**: `Generate new key pair`
@@ -168,7 +170,7 @@ This lab covers creating VMs, configuring availability options (Availability Set
    - **Virtual machine name**: `admin-vm-01`
    - **Region**: `East US`
    - **Image**: `Windows Server 2022 Datacenter - x64 Gen2`
-   - **Size**: `B2s` (Windows needs more resources)
+   - **Size**: `Standard_DS2_v2` (2 vCPU / 7 GB — Windows needs more resources; B2s requires quota increase on free trial)
    - **Authentication type**: `Password`
    - **Username**: `azureadmin`
    - **Password**: Create a strong one (min 12 chars, uppercase, lowercase, number, special char)
@@ -293,7 +295,7 @@ This lab covers creating VMs, configuring availability options (Availability Set
 ## Exam Tips
 - **Availability Set planning**: You set this at VM creation; you can't add an existing VM to an Availability Set
 - **Zone-redundancy**: If you use Availability Zones (Premium disk + Zone-redundant storage), you get 99.99% SLA
-- **VM sizing**: B-series is burstable (good for dev/test), D-series for sustained workloads
+- **VM sizing**: B-series is burstable (good for dev/test), D-series for sustained workloads. B-series requires quota allocation — free trial accounts start at 0 and can't self-serve an increase.
 - **Custom data is one-time**: Changes after VM creation won't re-run; use VM extensions or automation for updates
 - **Public IPs are billable**: If you're not using them, delete them to save ~$3/month per IP
 

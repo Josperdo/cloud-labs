@@ -32,12 +32,14 @@ This lab covers Azure Storage accounts (blobs, tables, queues), lifecycle polici
 
 3. **Advanced tab:**
    - **Require secure transfer**: `Enabled` (forces HTTPS)
+
+4. **Data protection tab**
    - **Blob soft delete**: `Enabled` (lets you recover deleted blobs for 7 days)
    - **Container soft delete**: `Enabled`
    - **Versioning**: `Enabled` (tracks blob history)
    - Leave other defaults
 
-4. **Review + create** → **Create**
+5. **Review + create** → **Create**
 
 **Wait ~1 minute**
 
@@ -196,24 +198,23 @@ This lab covers Azure Storage accounts (blobs, tables, queues), lifecycle polici
 
 ---
 
-## Part 9: Configure a Storage Account Firewall
+## Part 9: Restrict Public Network Access
 
-### Step 12: Restrict Access via Firewall
+### Step 12: Limit Access to Your IP Only
 1. Go to storage account → **Networking** (left sidebar, under Security + networking)
-2. Under **Firewalls and virtual networks:**
-   - **Default action**: `Deny`
-   - **Allow trusted Microsoft services**: Check this box
-3. Under **Virtual network access:**
-   - Click **+ Add existing virtual network** or **+ Add new virtual network**
-     - (If you still have Lab 1's VNets, select that; otherwise, skip this)
-4. Under **IP address access:**
-   - **Add your current IP** (find via "what's my IP"):
-   - Click **+ Add your client IP address** (it auto-fills)
-5. Click **Save**
+2. On the **Firewalls and virtual networks** tab, find **Public network access:**
+   - Select **Enabled from selected virtual networks and IP addresses**
+3. Scroll down to **Firewall** → **Address range:**
+   - Click **Add your client IP address** (it auto-detects and fills in your public IP)
+4. Scroll down to **Exceptions:**
+   - Check **Allow Azure services on the trusted services list to access this storage account**
+5. Click **Save** at the top
 
-**What happens**: Only traffic from your IP (or specified VNets) can access this storage account. All others get blocked.
+**What happens**: Only traffic from your IP can access this storage account. All other public internet traffic is blocked. Azure-internal services (like Azure Backup, Monitor) are still allowed via the trusted services exception.
 
-**Test**: Try accessing the blob via SAS URL from a different network (you'll be denied unless they're allowed via firewall).
+**Validate**: Copy the SAS URL from Part 6 and paste it in your browser — it should still work because your IP is allowed. If you tried from a different network (e.g., mobile hotspot), it would be denied.
+
+> **Note**: If you don't see the **Enabled from selected virtual networks and IP addresses** option, your subscription or account type may restrict network rule changes. You can read-only review the setting and move on — the exam concept is what matters.
 
 ---
 

@@ -1,120 +1,165 @@
-# Lab 2: Compute – Virtual Machines & Availability
+# Lab 2: Compute — Deploying Web Servers with Safe Remote Access
 
 ## Overview
-This lab covers creating VMs, configuring availability options (Availability Sets, Availability Zones), managed disks, and basic VM customization. You'll build a scalable, fault-tolerant VM environment.
+Spinning up a VM is straightforward. Doing it correctly — with proper network segmentation, locked-down remote access, an app installed on first boot, and persistent storage for application data — takes a bit more thought. This lab simulates the kind of compute deployment an entry-level cloud engineer would be asked to set up for a new application.
 
-**Estimated time**: 50–70 minutes
+**Estimated time**: 50–65 minutes
 **Cost**: ~$2–$5 (tear down at the end)
 
-> **Free Trial Limitation**: B-series VMs require a quota increase and are not selectable on Azure free trial subscriptions without one. Free trial accounts also cap at **4 vCPUs per region**. This lab uses `Standard_DS1_v2` (1 vCPU) for Linux VMs and `Standard_DS2_v2` (2 vCPU) for the Windows VM — totaling 4 vCPUs, which fits within the free trial limit. If either size is unavailable in your region, open **See all sizes**, filter by vCPUs (1 or 2), and pick the cheapest available option.
+> **Free Trial Note**: This lab uses `Standard_DS1_v2` (1 vCPU) for Linux VMs, which is typically available without a quota increase. If that size is unavailable in your region, open **See all sizes**, filter by 1–2 vCPUs, and pick the cheapest available option. Free trial accounts are capped at 4 vCPUs per region.
+
+---
+
+## Scenario
+Your team needs two web servers deployed for a new application — one is the primary, and the second ensures the app stays up if the first needs maintenance or has a hardware issue. Both need nginx installed and ready to serve traffic. SSH access should be locked down to your IP only. The app also needs a separate disk for storing uploaded files so that data isn't mixed with the OS disk.
 
 ---
 
 ## Objectives
-- Create and configure Windows and Linux VMs
-- Understand Availability Sets vs Availability Zones
-- Configure managed disks and disk encryption
-- Use custom script extensions for VM initialization
-- Manage VM sizing and pricing
+- Deploy Linux VMs into an existing VNet with proper networking
+- Lock down SSH access to a specific IP address
+- Use custom data to install and start an application on first boot
+- Attach a managed data disk to separate application data from the OS
+- Understand availability options so VMs survive hardware failures
+- Know how to stop VMs to avoid unnecessary charges
 
 ---
 
-## Part 1: Create Availability Set
+## Part 1: Set Up the Network
 
-### Step 1: Create an Availability Set
-1. Go to **Azure Portal** → search **Availability sets** → **+ Create**
-2. **Basics:**
-   - **Resource Group**: Create new → `az104-lab2-rg`
-   - **Name**: `WebServers-AvSet`
+### Step 1: Create a VNet for the Application
+If you completed Lab 1, this pattern is familiar. VMs go inside a VNet — you can't put them on the internet directly.
+
+1. Search **Virtual networks** → **+ Create**
+2. **Basics tab:**
+   - **Resource Group**: Create new → `webservers-rg`
+   - **Name**: `app-vnet`
    - **Region**: `East US`
-   - **Fault domains**: `2` (default; how many independent power/hardware failures the set can survive)
-   - **Update domains**: `5` (default; how Azure staggers maintenance updates)
-3. **Review + create** → **Create**
-
-**Why this matters**: Availability Sets ensure your VMs are distributed across different fault domains. If one rack fails, your app still runs.
+3. **IP Addresses tab:**
+   - Address space: `10.0.0.0/16`
+   - Add a subnet: Name: `web-subnet`, Range: `10.0.1.0/24`
+4. **Review + create** → **Create**
 
 ---
 
-## Part 2: Create First VM
+## Part 2: Deploy the First Web Server
 
-### Step 2: Create Linux VM #1
+### Step 2: Create the First Linux VM
 1. Search **Virtual machines** → **+ Create** → **Azure virtual machine**
 2. **Basics tab:**
-   - **Resource Group**: `az104-lab2-rg`
+   - **Resource Group**: `webservers-rg`
    - **Virtual machine name**: `web-vm-01`
    - **Region**: `East US`
+   - **Availability options**: `Availability zone`
+   - **Zone**: `1`
+     *(You'll deploy the second VM in Zone 2 — this way, a datacenter-level failure doesn't take both servers down at once)*
    - **Image**: `Ubuntu Server 22.04 LTS - x64 Gen2`
-   - **VM architecture**: `x64`
-   - **Size**: Click **See all sizes** → search `DS1_v2` → select `Standard_DS1_v2`
-     - *Why DS1_v2?* 1 vCPU / 3.5 GB RAM; typically available on free trial with no quota request needed. B1s is cheaper but requires a quota increase on free trial accounts.
+   - **Size**: `Standard_DS1_v2` (1 vCPU / 3.5 GB RAM)
    - **Authentication type**: `SSH public key`
    - **Username**: `azureuser`
    - **SSH public key source**: `Generate new key pair`
    - **Key pair name**: `web-vm-01-key`
 
-3. **Disk tab:**
-   - **OS disk type**: `Premium SSD` (leave as is; the default)
-   - Leave encryption at default (unencrypted for this lab)
+3. **Disks tab:**
+   - **OS disk type**: `Standard SSD` (sufficient for a web server; save Premium SSD for databases)
 
 4. **Networking tab:**
-   - **Virtual network**: `Create new` → name it `Lab2-VNet`, address space `10.0.0.0/16`
-   - **Subnet**: `Create new` → name it `VmSubnet`, address space `10.0.1.0/24`
-   - **Public IP**: Leave as default (auto-creates one for SSH access)
-   - **Network security group**: `Create new` → name it `VM-NSG`
-     - You'll configure this in a moment
+   - **Virtual network**: `app-vnet`
+   - **Subnet**: `web-subnet`
+   - **Public IP**: Leave as default (auto-creates one; needed for SSH and web access in this lab)
+   - **NIC network security group**: `Advanced` → **Create new**
+     - Name it `web-vm-nsg`
+     - You'll configure rules after creation — remove the default RDP/SSH rules for now if any appear, since you'll set them up explicitly
 
-5. **Management tab:**
-   - **Monitoring**: Leave defaults (can enable later if you want)
+5. **Advanced tab:**
+   - **Custom data**: Paste the following script
+     ```bash
+     #!/bin/bash
+     apt-get update -y
+     apt-get install -y nginx
+     systemctl enable nginx
+     systemctl start nginx
+     echo "web-vm-01 is running" > /var/www/html/index.html
+     ```
+     *This runs once on first boot. By the time the VM is ready, nginx will already be installed and serving traffic.*
 
-6. **Advanced tab:**
-   - Leave defaults
+6. **Review + create** → **Create**
+7. When prompted: **Download private key and create resource**
+   - Save `web-vm-01-key.pem` somewhere secure on your machine
 
-7. **Review + create** → **Create**
-
-8. **Key pair generation popup**: Click **Download private key and create resource**
-   - This downloads `web-vm-01-key.pem` — **keep this safe; you'll need it to SSH**
-
-**Wait ~3–5 minutes** for VM deployment.
+**Wait ~3–5 minutes** for deployment.
 
 ---
 
-## Part 3: Configure VM NSG and SSH Access
+## Part 3: Lock Down SSH Access
 
-### Step 3: Configure VM-NSG to Allow SSH
-1. Search **Network security groups** → Open `VM-NSG`
+### Step 3: Configure the NSG to Allow SSH Only From Your IP
+The VM was created with a network security group. Right now it may have no rules (or overly permissive defaults). You need to explicitly allow SSH from your IP and HTTP/HTTPS from the internet.
+
+1. Search **Network security groups** → Open `web-vm-nsg`
 2. **Inbound security rules** → **+ Add**
-3. **Add inbound rule:**
+
+3. **Rule 1 — Allow SSH from your IP only:**
    - **Source**: `IP Addresses`
-   - **Source IP addresses**: Your public IP (find via "what's my IP")
-   - **Destination port ranges**: `22`
+   - **Source IP**: Your public IP (search "what's my IP")
+   - **Destination port**: `22`
    - **Protocol**: `TCP`
    - **Action**: `Allow`
    - **Priority**: `100`
-   - **Name**: `AllowSSHFromMyIP`
-4. Click **Add**
+   - **Name**: `AllowSSH`
+   - Click **Add**
 
-### Step 4: Test SSH Connectivity (Optional But Recommended)
-1. Go back to `web-vm-01` → Copy its **Public IP address**
-2. Open terminal/PowerShell on your machine
-3. Run:
+4. **Rule 2 — Allow HTTP:**
+   - **Source**: `Any`
+   - **Destination port**: `80`
+   - **Protocol**: `TCP`
+   - **Action**: `Allow`
+   - **Priority**: `110`
+   - **Name**: `AllowHTTP`
+   - Click **Add**
+
+5. **Rule 3 — Allow HTTPS:**
+   - **Source**: `Any`
+   - **Destination port**: `443`
+   - **Protocol**: `TCP`
+   - **Action**: `Allow`
+   - **Priority**: `120`
+   - **Name**: `AllowHTTPS`
+   - Click **Add**
+
+**Why these priorities?** Rules are evaluated from lowest number to highest. Lower number = higher priority. Leave gaps between priorities (100, 110, 120) so you can insert rules later without renumbering.
+
+### Step 4: Test SSH Access
+1. Open `web-vm-01` → Copy the **Public IP address**
+2. Open a terminal on your machine and run:
    ```bash
-   ssh -i path/to/web-vm-01-key.pem azureuser@<PUBLIC_IP>
+   chmod 400 /path/to/web-vm-01-key.pem
+   ssh -i /path/to/web-vm-01-key.pem azureuser@<PUBLIC_IP>
    ```
-4. Type `yes` when prompted about RSA key fingerprint
-5. If successful, you're in the VM. Type `exit` to leave.
+3. Type `yes` when prompted about the fingerprint
+4. Once connected, verify nginx is running:
+   ```bash
+   curl http://localhost
+   ```
+   You should see `web-vm-01 is running`
+5. Type `exit` to disconnect
 
-**This validates**: Public IP, NSG rule, and SSH key are all working.
+**If SSH fails**: Double-check the NSG rule source IP matches your current public IP, and confirm the NSG is associated with the VM's network interface or subnet.
 
 ---
 
-## Part 4: Create Second VM with Custom Script
+## Part 4: Deploy the Second Web Server
 
-### Step 5: Create Linux VM #2 (In Same Availability Set)
+### Step 5: Create the Second VM in a Different Availability Zone
+The second VM is almost identical to the first, but placed in Zone 2. If the hardware hosting Zone 1 fails, Zone 2 is unaffected.
+
 1. **Virtual machines** → **+ Create** → **Azure virtual machine**
 2. **Basics tab:**
-   - **Resource Group**: `az104-lab2-rg`
+   - **Resource Group**: `webservers-rg`
    - **Virtual machine name**: `web-vm-02`
    - **Region**: `East US`
+   - **Availability options**: `Availability zone`
+   - **Zone**: `2`
    - **Image**: `Ubuntu Server 22.04 LTS - x64 Gen2`
    - **Size**: `Standard_DS1_v2`
    - **Authentication type**: `SSH public key`
@@ -122,187 +167,142 @@ This lab covers creating VMs, configuring availability options (Availability Set
    - **SSH public key source**: `Generate new key pair`
    - **Key pair name**: `web-vm-02-key`
 
-3. **Disk tab**: Leave defaults
-
-4. **Networking tab:**
-   - **Virtual network**: `Lab2-VNet` (the one you created earlier)
-   - **Subnet**: `VmSubnet`
+3. **Networking tab:**
+   - **Virtual network**: `app-vnet`
+   - **Subnet**: `web-subnet`
    - **Public IP**: Auto-create
-   - **Network security group**: `Existing` → select `VM-NSG`
+   - **NIC network security group**: `Advanced` → Select existing → `web-vm-nsg`
+     *(Both VMs share the same NSG so you manage rules in one place)*
 
-5. **Management tab:** Leave defaults
-
-6. **Advanced tab:**
-   - **Custom data**: Paste this (it runs on first boot):
+4. **Advanced tab:**
+   - **Custom data**:
      ```bash
      #!/bin/bash
-     apt-get update
+     apt-get update -y
      apt-get install -y nginx
+     systemctl enable nginx
      systemctl start nginx
+     echo "web-vm-02 is running" > /var/www/html/index.html
      ```
-     *This installs and starts Nginx, so you can test web access later*
 
-7. **Review + create** → **Create**
-
-8. Download the private key again
+5. **Review + create** → **Create**
+6. Download the `web-vm-02-key.pem` file
 
 **Wait ~3–5 minutes**
 
----
-
-## Part 5: Move VM to Availability Set (Portal Workaround)
-
-**Note**: Azure doesn't let you add an existing VM to an Availability Set in the portal. This step shows you *why* you need to plan ahead.
-
-1. Open `web-vm-02` → **Overview** tab
-2. Scroll down → Look for **Availability options**: Shows "No infrastructure redundancy required"
-
-**Key learning**: You would have needed to specify the Availability Set *during creation*. For this lab, you've learned the workflow; in production, you'd plan this upfront.
+**Why two availability zones instead of two VMs in the same zone?** Availability zones are physically separate datacenters within the same Azure region. If there's a power failure or cooling issue in one zone, the other is unaffected. Two VMs in the same zone don't give you that protection.
 
 ---
 
-## Part 6: Create Windows VM (Different Approach)
+## Part 5: Add a Data Disk for Application Storage
 
-### Step 6: Create Windows VM
-1. **Virtual machines** → **+ Create** → **Azure virtual machine**
-2. **Basics tab:**
-   - **Resource Group**: `az104-lab2-rg`
-   - **Virtual machine name**: `admin-vm-01`
-   - **Region**: `East US`
-   - **Image**: `Windows Server 2022 Datacenter - x64 Gen2`
-   - **Size**: `Standard_DS2_v2` (2 vCPU / 7 GB — Windows needs more resources; B2s requires quota increase on free trial)
-   - **Authentication type**: `Password`
-   - **Username**: `azureadmin`
-   - **Password**: Create a strong one (min 12 chars, uppercase, lowercase, number, special char)
-     - Example: `P@ssw0rd!Lab2024`
+### Step 6: Create a Managed Disk
+Application data — uploaded files, logs, local caches — should not live on the OS disk. If you ever need to replace or resize the OS, you'd lose that data. A separate data disk can be detached from one VM and reattached to another.
 
-3. **Disk tab**: Leave defaults (Windows needs Premium SSD)
-
-4. **Networking tab:**
-   - **Virtual network**: `Lab2-VNet`
-   - **Subnet**: `VmSubnet`
-   - **Public IP**: Auto-create
-   - **Network security group**: `Existing` → select `VM-NSG`
-
-5. **Management tab**: Leave defaults
-
-6. **Review + create** → **Create**
-
-**Wait ~5–8 minutes** (Windows takes longer)
-
----
-
-## Part 7: Configure RDP Access
-
-### Step 7: Add RDP Rule to VM-NSG
-1. Open `VM-NSG` → **Inbound security rules** → **+ Add**
-2. **Add inbound rule:**
-   - **Source**: `IP Addresses`
-   - **Source IP addresses**: Your public IP
-   - **Destination port ranges**: `3389`
-   - **Protocol**: `TCP`
-   - **Action**: `Allow`
-   - **Priority**: `110`
-   - **Name**: `AllowRDPFromMyIP`
-3. Click **Add**
-
-### Step 8: Connect via RDP (Optional)
-1. Open `admin-vm-01` → Copy **Public IP**
-2. On your machine:
-   - **Windows**: Press `Win + R` → type `mstsc` → enter the IP
-   - **Mac/Linux**: Use Remote Desktop Connection app or `rdesktop`
-3. Username: `azureadmin`, Password: the one you created
-
----
-
-## Part 8: Understand Disk Management
-
-### Step 9: Inspect VM Disks
-1. Open `web-vm-01` → **Disks** (left sidebar)
-2. You'll see:
-   - **OS disk**: The boot disk (e.g., `web-vm-01_OsDisk_1...`)
-   - **Data disk**: None (you didn't add any)
-
-### Step 10: Create and Attach a Data Disk
 1. Search **Disks** → **+ Create**
-2. **Create managed disk:**
-   - **Resource Group**: `az104-lab2-rg`
-   - **Disk name**: `web-vm-01-data-disk`
+2. **Basics:**
+   - **Resource Group**: `webservers-rg`
+   - **Disk name**: `web-vm-01-data`
    - **Region**: `East US`
-   - **Availability zone**: Leave as default
-   - **Disk SKU**: `Premium SSD` (or `Standard SSD` to save money)
+   - **Availability zone**: `1` (must match the VM it'll attach to)
+   - **Disk SKU**: `Standard SSD`
    - **Source type**: `None` (blank disk)
    - **Size**: `32 GiB`
-3. **Create**
+3. Click **Review + create** → **Create**
 
-### Step 11: Attach Disk to VM
-1. After creation, open the new disk → **Overview**
-2. Click **Attach to VM** at the top
-3. **Attach managed disk:**
-   - **Virtual machine**: `web-vm-01`
-   - **LUN** (Logical Unit Number): `0`
-4. Click **Attach**
+### Step 7: Attach the Disk to the VM
+1. Open `web-vm-01` → Left sidebar → **Disks**
+2. Click **+ Attach existing disks** or **Add data disk**
+3. Select `web-vm-01-data`
+4. Click **Apply**
 
-**What you've learned**: Managed disks are independent resources you can attach/detach from VMs. In production, you'd use these for databases, application data, etc.
+### Step 8: Mount the Disk Inside the VM (Optional but Complete)
+The disk is attached at the Azure level but needs to be formatted and mounted inside the OS before the app can use it.
 
----
-
-## Part 9: Validation & Testing
-
-### Step 12: Verify Everything
-1. Go to **Virtual machines** dashboard
-   - You should see three VMs: `web-vm-01`, `web-vm-02`, `admin-vm-01`
-   - All should have a public IP
-
-2. Check `web-vm-01` → **Disks**
-   - Should list both OS disk and the data disk you attached
-
-3. Check `web-vm-02` → **Extensions**
-   - Should show the Nginx installation ran (Custom Script Extension)
-
-4. (Optional) SSH into `web-vm-02` and run:
+1. SSH into `web-vm-01`:
    ```bash
-   curl http://localhost
+   ssh -i web-vm-01-key.pem azureuser@<PUBLIC_IP>
    ```
-   You should see the Nginx welcome page HTML
+2. Find the new disk (it'll show up as `sdc` or similar):
+   ```bash
+   lsblk
+   ```
+3. Format and mount it:
+   ```bash
+   sudo mkfs.ext4 /dev/sdc
+   sudo mkdir /data
+   sudo mount /dev/sdc /data
+   ```
+4. Make the mount persist across reboots:
+   ```bash
+   echo '/dev/sdc /data ext4 defaults 0 2' | sudo tee -a /etc/fstab
+   ```
+5. Verify:
+   ```bash
+   df -h /data
+   ```
 
 ---
 
-## Part 10: Cleanup
+## Part 6: Understand Availability and Cost
 
-1. Go to **Resource groups** → Click `az104-lab2-rg`
-2. Click **Delete resource group**
-3. Type the resource group name
-4. Click **Delete**
+### Step 9: Review What Protects Your VMs
+1. Go to **Virtual machines** dashboard
+2. Open `web-vm-01` → **Overview**
+   - Look for **Availability zone**: Should show `1`
+3. Open `web-vm-02` → **Overview**
+   - Should show zone `2`
 
-**Wait 3–5 minutes** for all VMs and disks to tear down.
+If Azure has an issue in Zone 1, web-vm-02 in Zone 2 is still running. A load balancer (not in this lab, but a natural next step) would route traffic to whichever VMs are healthy.
+
+### Step 10: Stop VMs When Not in Use
+VMs cost money while running, even if they're idle. In dev and test environments, stopping them when you're done saves significant money.
+
+1. Open `web-vm-01` → Click **Stop** at the top
+2. Confirm the stop
+3. Repeat for `web-vm-02`
+
+When a VM is stopped (deallocated), you're not charged for compute. You still pay a small amount for the managed disks.
+
+**In a real environment**: You'd automate this with Azure Automation or start/stop schedules so dev VMs aren't running overnight or on weekends.
 
 ---
 
-## Key Concepts to Understand
+## Part 7: Cleanup
 
-| Concept | What It Does |
-|---------|-------------|
-| **Availability Set** | Spreads VMs across fault domains to survive hardware failures |
-| **Availability Zone** | Spreads VMs across physically separate datacenters within a region |
-| **Managed Disk** | Azure handles the underlying storage account; you just reference it by name |
-| **Custom Data** | Script that runs once at first boot (via User Data/Cloud-Init) |
-| **Public IP** | Allows inbound internet traffic to the VM |
-| **SSH vs RDP** | SSH for Linux, RDP for Windows remote access |
+1. **Resource groups** → `webservers-rg` → **Delete resource group**
+2. Confirm with the resource group name → **Delete**
+
+This deletes both VMs, both disks, the VNet, NSG, and public IPs.
 
 ---
 
-## Exam Tips
-- **Availability Set planning**: You set this at VM creation; you can't add an existing VM to an Availability Set
-- **Zone-redundancy**: If you use Availability Zones (Premium disk + Zone-redundant storage), you get 99.99% SLA
-- **VM sizing**: B-series is burstable (good for dev/test), D-series for sustained workloads. B-series requires quota allocation — free trial accounts start at 0 and can't self-serve an increase.
-- **Custom data is one-time**: Changes after VM creation won't re-run; use VM extensions or automation for updates
-- **Public IPs are billable**: If you're not using them, delete them to save ~$3/month per IP
+## What You Practiced
+
+| Task | Why It Matters on the Job |
+|------|--------------------------|
+| **Availability zones** | Deploying across zones means a datacenter issue doesn't take your whole app down |
+| **SSH key authentication** | Password auth on a public VM is a security risk; SSH keys are the standard |
+| **NSG rules scoped to your IP** | Open SSH ports get brute-forced within minutes of deployment |
+| **Custom data (cloud-init)** | Automated app installation on first boot instead of manual SSH setup |
+| **Managed data disk** | Keeps application data independent from the OS so you can replace the VM without data loss |
+| **Stopping VMs when idle** | Dev/test VMs running 24/7 waste budget; stop them when you're done |
+
+---
+
+## Common Mistakes to Avoid
+- **Opening SSH to `Any` in the NSG**: Port 22 is constantly scanned; always restrict to known IPs
+- **Putting app data on the OS disk**: If you resize or recreate the VM, you'll lose everything on the OS disk
+- **Both VMs in the same availability zone**: They look redundant but aren't — a single zone failure takes both down
+- **Using Premium SSD everywhere**: Premium SSD costs 3–4x more than Standard SSD; use it only where IOPS performance matters (databases, not web servers)
+- **Forgetting to deallocate VMs**: "Stopped" in the OS doesn't stop billing; you must deallocate from the Azure portal to stop compute charges
+- **Hardcoding the VM's public IP**: Public IPs can change; use DNS names or a load balancer in front of VMs for stable addressing
 
 ---
 
 ## Next Steps
-- Deploy a Load Balancer in front of multiple VMs
-- Use Azure Automation to start/stop VMs on schedule
-- Create a VM image from `web-vm-01` (generalize it, then capture)
-- Implement disk encryption (Azure Disk Encryption)
+- Deploy a Load Balancer in front of both web VMs to distribute traffic and enable health checks
+- Set up Azure Bastion so you can SSH without exposing port 22 publicly at all
+- Create a VM image from `web-vm-01` so future deployments start with nginx pre-installed
+- Use VM Scale Sets to automatically add or remove VMs based on CPU load
+- Set up auto-shutdown schedules on dev VMs to avoid overnight charges

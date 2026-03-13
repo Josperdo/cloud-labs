@@ -1,6 +1,6 @@
 # Azure Hands-On Labs
 
-A comprehensive set of hands-on Azure labs covering portal-based administration and Terraform-based infrastructure as code. Labs 1–5 focus on AZ-104 domains via the Azure portal. Labs 6–7 cover Terraform, with skills that transfer directly to AWS.
+A comprehensive set of hands-on Azure labs covering portal-based administration and Terraform-based infrastructure as code. Labs 1–5 focus on AZ-104 domains via the Azure portal. Labs 6–7 cover Terraform, with skills that transfer directly to AWS. Lab 8 puts everything together by intentionally breaking a live environment to understand real failure modes.
 
 ---
 
@@ -15,9 +15,10 @@ A comprehensive set of hands-on Azure labs covering portal-based administration 
 | **Lab 5** | Monitoring & Logging | 60–75 min | ~$2–$5 | Log Analytics, KQL, alerts, diagnostics |
 | **Lab 6** | Terraform Fundamentals | 60–75 min | ~$0.50 | HCL, plan/apply/destroy, variables, state |
 | **Lab 7** | Terraform Modules & Remote State | 65–80 min | ~$1–$2 | Remote state, modules, multi-environment deployments |
+| **Lab 8** | Break Things (Chaos Engineering) | 60–90 min | ~$1–$3 | Resource locks, NSG debugging, RBAC scoping, SAS tokens, Terraform lock recovery |
 
-**Total time**: ~8–10 hours
-**Total cost**: ~$7–$14 (if done sequentially and cleaned up after each lab)
+**Total time**: ~9–12 hours
+**Total cost**: ~$8–$17 (if done sequentially and cleaned up after each lab)
 
 ---
 
@@ -36,8 +37,8 @@ A comprehensive set of hands-on Azure labs covering portal-based administration 
 ## How to Use These Labs
 
 ### Option 1: Sequential (Recommended)
-Work through labs 1–7 in order. Each builds foundational concepts:
-1. Networks (Lab 1) → Compute (Lab 2) → Storage (Lab 3) → Identity (Lab 4) → Monitoring (Lab 5) → Terraform Fundamentals (Lab 6) → Terraform Modules (Lab 7)
+Work through labs 1–8 in order. Each builds foundational concepts:
+1. Networks (Lab 1) → Compute (Lab 2) → Storage (Lab 3) → Identity (Lab 4) → Monitoring (Lab 5) → Terraform Fundamentals (Lab 6) → Terraform Modules (Lab 7) → Break Things (Lab 8)
 
 ### Option 2: Target Weak Areas
 Identify which AZ-104 domain is your weakness and jump to that lab:

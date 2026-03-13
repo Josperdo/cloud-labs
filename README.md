@@ -1,6 +1,6 @@
-# AZ-104 Hands-On Labs
+# Azure Hands-On Labs
 
-A comprehensive set of 5 hands-on Azure labs designed to bridge the gap between exam knowledge and practical portal experience. Each lab focuses on a specific AZ-104 domain with real-world scenarios.
+A comprehensive set of hands-on Azure labs covering portal-based administration and Terraform-based infrastructure as code. Labs 1–5 focus on AZ-104 domains via the Azure portal. Labs 6–7 cover Terraform, with skills that transfer directly to AWS.
 
 ---
 
@@ -13,9 +13,11 @@ A comprehensive set of 5 hands-on Azure labs designed to bridge the gap between 
 | **Lab 3** | Storage & Data | 45–60 min | ~$0.50 | Blob tiers, lifecycle policies, replication |
 | **Lab 4** | Identity & Access Control | 60–75 min | ~$0 | RBAC, Entra ID, managed identities, custom roles |
 | **Lab 5** | Monitoring & Logging | 60–75 min | ~$2–$5 | Log Analytics, KQL, alerts, diagnostics |
+| **Lab 6** | Terraform Fundamentals | 60–75 min | ~$0.50 | HCL, plan/apply/destroy, variables, state |
+| **Lab 7** | Terraform Modules & Remote State | 65–80 min | ~$1–$2 | Remote state, modules, multi-environment deployments |
 
-**Total time**: ~4.5–5.5 hours  
-**Total cost**: ~$5–$11 (if done sequentially and cleaned up after each lab)
+**Total time**: ~8–10 hours
+**Total cost**: ~$7–$14 (if done sequentially and cleaned up after each lab)
 
 ---
 
@@ -26,14 +28,16 @@ A comprehensive set of 5 hands-on Azure labs designed to bridge the gap between 
 - **SSH/RDP client** (PuTTY, Windows Terminal, or native OpenSSH)
 - **Text editor** for viewing queries and configs
 - **Basic understanding** of networking, cloud concepts, and security
+- **Terraform CLI** (Labs 6–7 only) — install via `brew install hashicorp/tap/terraform` or from [terraform.io](https://developer.hashicorp.com/terraform/install)
+- **Azure CLI** (Labs 6–7 only) — install via `brew install azure-cli` or from [Microsoft docs](https://learn.microsoft.com/en-us/cli/azure/install-azure-cli)
 
 ---
 
 ## How to Use These Labs
 
 ### Option 1: Sequential (Recommended)
-Work through labs 1–5 in order. Each builds foundational concepts:
-1. Networks (Lab 1) → Compute (Lab 2) → Storage (Lab 3) → Identity (Lab 4) → Monitoring (Lab 5)
+Work through labs 1–7 in order. Each builds foundational concepts:
+1. Networks (Lab 1) → Compute (Lab 2) → Storage (Lab 3) → Identity (Lab 4) → Monitoring (Lab 5) → Terraform Fundamentals (Lab 6) → Terraform Modules (Lab 7)
 
 ### Option 2: Target Weak Areas
 Identify which AZ-104 domain is your weakness and jump to that lab:
@@ -42,7 +46,10 @@ Identify which AZ-104 domain is your weakness and jump to that lab:
 - Monitoring is fuzzy? → Start with Lab 5
 
 ### Option 3: Exam Prep Sprint
-Do one lab per day for 5 days. Each lab takes 45–75 minutes plus cleanup.
+Do one portal lab per day for 5 days (Labs 1–5). Then tackle the Terraform labs (6–7) as a two-day IaC sprint.
+
+### Option 4: IaC Fast Track
+If you already know Azure basics, jump straight to Labs 6 and 7 to focus on Terraform. These skills transfer directly to AWS (same tool, different provider).
 
 ---
 

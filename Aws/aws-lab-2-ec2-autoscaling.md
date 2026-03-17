@@ -1,5 +1,7 @@
 # AWS Lab 2: EC2, Auto Scaling & Load Balancing
 
+Check box if done: []
+
 ## Overview
 This lab mirrors Azure Lab 2 (compute) but on AWS. You'll deploy EC2 instances, configure Auto Scaling Groups, and set up a Load Balancer. This is where your infrastructure *actually does work*.
 

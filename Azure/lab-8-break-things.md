@@ -1,5 +1,7 @@
 # Lab 8: Break Things — Chaos Engineering on Your Own Infrastructure
 
+Check box if done: []
+
 ## Overview
 The best way to understand how Azure protects you — and where it doesn't — is to intentionally break things in a controlled environment. This lab deploys a small, cheap environment and then systematically attacks its own controls: misconfigured NSGs, deleted dependencies, bypassed locks, revoked access, and forced Terraform state conflicts. Each break teaches you something a real incident would have taught you the hard way.
 

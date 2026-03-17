@@ -1,5 +1,7 @@
 # Lab 5: Monitoring — Getting Visibility Before You Go Live
 
+Check box if done: [x]
+
 ## Overview
 Deploying resources is only half the job. Before anything goes to production, you need to make sure you'll know when something breaks — before your users or manager tells you. This lab walks through setting up logging, writing queries to answer real operational questions, creating a meaningful alert, and building a simple health dashboard your team can actually use.
 

@@ -1,5 +1,7 @@
 # AWS Lab 1: VPC, Security Groups & IAM Fundamentals
 
+Check box if done: []
+
 ## Overview
 This lab mirrors Azure Lab 1 (networking) but on AWS. You'll build a VPC with subnets, configure security groups, and set up IAM roles/policies. This is foundational—everything in AWS runs *inside* a VPC.
 

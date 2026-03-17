@@ -1,5 +1,7 @@
 # AWS Lab 3: S3, Security & Lifecycle Management
 
+Check box if done: []
+
 ## Overview
 This lab mirrors Azure Lab 3 (storage) but on AWS. You'll create S3 buckets, configure access controls, implement lifecycle policies, and practice security hardening. S3 is the most important AWS service—it's *everywhere*.
 

@@ -1,5 +1,7 @@
 # Lab 2: Compute — Deploying Web Servers with Safe Remote Access
 
+Check box if done: [x]
+
 ## Overview
 Spinning up a VM is straightforward. Doing it correctly — with proper network segmentation, locked-down remote access, an app installed on first boot, and persistent storage for application data — takes a bit more thought. This lab simulates the kind of compute deployment an entry-level cloud engineer would be asked to set up for a new application.
 

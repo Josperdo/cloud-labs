@@ -1,5 +1,7 @@
 # Lab 7: Terraform Modules and Remote State — Team-Ready Infrastructure
 
+Check box if done: []
+
 ## Overview
 A single `main.tf` works fine for a lab. On a real team, you need configurations that multiple engineers can work on simultaneously without overwriting each other's changes, organized into reusable pieces so you don't copy-paste the same networking setup into every project. This lab covers the two things that make Terraform production-grade: remote state (shared, locked, versioned) and modules (reusable infrastructure components).
 

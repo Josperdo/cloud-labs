@@ -1,5 +1,7 @@
 # AWS Lab 4: Multi-Cloud Terraform Project (Capstone)
 
+Check box if done: []
+
 ## Overview
 This is your capstone lab. You'll refactor your existing Azure Terraform project to work on **both Azure and AWS** with a single codebase. This is what separates "I took AWS labs" from "I'm a cloud engineer."
 

@@ -1,5 +1,7 @@
 # Lab 4: Access Management — Onboarding & Service Identities
 
+Check box if done: [x]
+
 ## Overview
 As a cloud engineer, you'll regularly be asked to onboard new team members, grant an application access to Azure resources, and audit who has access to what. This lab simulates three common real-world tasks: onboarding a new developer, setting up a managed identity so an app can authenticate without stored credentials, and verifying permissions before handing things off.
 

@@ -1,5 +1,7 @@
 # Lab 3: Storage — Setting Up Persistent Storage for an Application
 
+Check box if done: [x]
+
 ## Overview
 Most applications need somewhere to store files — user uploads, application logs, backups, exports. Azure Blob Storage handles all of that, but getting it right from day one means thinking about cost management (old files should automatically get cheaper to store), data protection (accidental deletions should be recoverable), and access control (not everyone who needs to read a file should get the master key). This lab sets up a storage account the way you'd do it for a real application.
 

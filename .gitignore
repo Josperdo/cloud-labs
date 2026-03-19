@@ -33,3 +33,15 @@ desktop.ini
 .idea/
 *.swp
 *.swo
+
+# Terraform files
+*.tf
+*.tf.json
+.terraform.lock.hcl
+*.tfplan
+crash.log
+crash.*.log
+override.tf
+override.tf.json
+*_override.tf
+*_override.tf.json

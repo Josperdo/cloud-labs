@@ -1,6 +1,6 @@
 # Lab 6: Terraform Fundamentals — Deploying Azure Infrastructure as Code
 
-Check box if done: []
+Check box if done: [x]
 
 ## Overview
 Clicking through the Azure portal works for learning and one-offs. But on a real team, you need infrastructure that's repeatable, reviewable in code review, and deployable in minutes without manual steps. Terraform is the industry-standard tool for this. Once you know Terraform, the skills transfer directly to AWS, GCP, or any other cloud — only the provider changes, not the workflow.

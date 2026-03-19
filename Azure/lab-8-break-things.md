@@ -34,12 +34,12 @@ Before you can break things, you need something to break. This creates one resou
 ### Step 1: Create the Resource Group and Storage Account
 
 ```bash
-az group create --name break-lab-rg --location eastus
+az group create --name break-lab-rg --location eastus2
 
 az storage account create \
   --name breaklab$RANDOM \
   --resource-group break-lab-rg \
-  --location eastus \
+  --location eastus2 \
   --sku Standard_LRS \
   --min-tls-version TLS1_2 \
   --allow-blob-public-access false
@@ -391,7 +391,7 @@ provider "azurerm" {
 
 resource "azurerm_resource_group" "chaos" {
   name     = "chaos-test-rg"
-  location = "East US"
+  location = "East US 2"
 }
 ```
 

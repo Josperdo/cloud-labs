@@ -168,7 +168,7 @@ az network nsg rule create \
   --resource-group break-lab-rg \
   --nsg-name break-nsg \
   --name BlockSSH \
-  --priority 90 \
+  --priority 110 \
   --direction Inbound \
   --access Deny \
   --protocol Tcp \
@@ -181,7 +181,9 @@ az network nsg rule create \
 ssh -o ConnectTimeout=5 labadmin@<PUBLIC-IP>
 ```
 
-**Expected result**: Connection times out. The Deny rule at priority 90 is evaluated before the Allow rule at priority 100, so the packet gets dropped.
+**Expected result**: Connection times out. The Deny rule at priority 110 is evaluated before the Allow rule at priority 100, so the packet gets dropped.
+
+> **Note**: NSG rule priorities must be between 100–4096. Priority 110 beats 100 here because lower numbers win — but if SSH still connects, check that `AllowSSH` isn't at a lower number than `BlockSSH`. If needed, update AllowSSH: `az network nsg rule update --resource-group break-lab-rg --nsg-name break-nsg --name AllowSSH --priority 120`
 
 **What this looks like in the real world**: A security team adds a Deny rule to harden an NSG but sets the wrong priority. Applications that were working start timing out. The team checks if the service is down, checks the application logs — everything looks fine. This is a common 30-minute debugging session. Now you know to check NSG effective rules first.
 
@@ -189,7 +191,7 @@ ssh -o ConnectTimeout=5 labadmin@<PUBLIC-IP>
 
 Don't just fix the rule — use the diagnostic tool first:
 
-1. Portal → search **Network Watcher** → **IP Flow Verify**
+1. Portal → search **Network Watcher** in the top search bar (it lives in its own `NetworkWatcherRG`, not your resource group) → left sidebar → **Network diagnostic tools** → **IP Flow Verify**
 2. Fill in:
    - **VM**: break-vm
    - **Direction**: Inbound
@@ -236,6 +238,8 @@ az storage blob upload \
   --auth-mode login
 ```
 
+> **Expected**: The upload may fail with a permissions error even as Owner — storage data plane operations require an explicit `Storage Blob Data Contributor` role assignment, separate from RBAC control plane access. This is intentional and demonstrated further in Part 4. If it fails, note the error and continue — you'll fix access in Part 4.
+
 ### Step 2: Break #1 — Try Public Access
 
 Public blob access is disabled on this account (you set `--allow-blob-public-access false` during setup). Try to enable it anyway:
@@ -253,8 +257,7 @@ Then try to make the container public:
 az storage container set-permission \
   --name test-container \
   --account-name $STORAGE_ACCOUNT \
-  --public-access blob \
-  --auth-mode login
+  --public-access blob
 ```
 
 **Expected result**: The container permission update will either fail or, if it succeeds, the blob will now be publicly readable by anyone with the URL. This demonstrates why `--allow-blob-public-access false` matters — it's a preventive control, not just a default you leave on.
@@ -272,17 +275,24 @@ az storage account update \
 A SAS (Shared Access Signature) token grants access without requiring Azure AD credentials. If you generate one carelessly, you hand anyone who finds the URL read/write/delete access to your data.
 
 ```bash
-# Generate a SAS with all permissions, expiring far in the future
+# Get the account key first
+STORAGE_KEY=$(az storage account keys list \
+  --resource-group break-lab-rg \
+  --account-name $STORAGE_ACCOUNT \
+  --query "[0].value" --output tsv)
+
+# Generate a SAS with broad permissions, expiring far in the future
 az storage blob generate-sas \
   --account-name $STORAGE_ACCOUNT \
   --container-name test-container \
   --name secret.txt \
-  --permissions racwdlx \
+  --permissions racwdx \
   --expiry 2030-01-01 \
-  --auth-mode login \
-  --as-user \
+  --account-key $STORAGE_KEY \
   --full-uri
 ```
+
+> **Notes**: Valid permission letters are `a c d e i m r t w x y` — `l` is not valid and will error. The `--as-user` flag enforces a 7-day max expiry and requires `Storage Blob Data Contributor` role; use `--account-key` instead to avoid those restrictions in this lab.
 
 You now have a URL that grants full access to that blob for years. Anyone who finds this URL in a git commit, Slack message, or log file can access your data.
 

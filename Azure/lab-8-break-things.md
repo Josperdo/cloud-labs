@@ -81,7 +81,7 @@ az vm create \
   --resource-group break-lab-rg \
   --name break-vm \
   --image Ubuntu2204 \
-  --size Standard_B1s \
+  --size Standard_D2als_v7 \
   --vnet-name break-vnet \
   --subnet break-subnet \
   --nsg "" \

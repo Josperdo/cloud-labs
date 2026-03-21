@@ -374,9 +374,37 @@ Re-run the download — it should succeed now.
 
 Terraform remote state includes a lease/lock mechanism (via Azure Storage blob leasing). If two `terraform apply` runs happen simultaneously, one should block. This simulates what happens when state gets corrupted or the lock isn't released properly.
 
+### Step 0: Create a Remote State Backend (skip if you did Lab 7)
+
+If you don't have a Terraform state storage account from Lab 7, create one now:
+
+```bash
+az group create --name tf-state-rg --location eastus2
+
+az storage account create \
+  --name tfstate$RANDOM \
+  --resource-group tf-state-rg \
+  --sku Standard_LRS
+```
+
+Note the storage account name from the output (e.g. `tfstate27164`), then create the container:
+
+```bash
+az storage container create \
+  --name tfstate \
+  --account-name <your-tfstate-account-name> \
+  --auth-mode login
+```
+
 ### Step 1: Set Up a Minimal Terraform Config
 
-If you still have the state backend from Lab 7, use a new key (file name within the container) so you don't disturb previous state.
+Navigate to the `Azure/` folder of this project:
+
+```bash
+cd ~/Desktop/Desktop/Programming/"Cloud & Linux Labs"/Azure
+```
+
+Create or open `main.tf` in your editor and paste the config below, replacing `YOUR_STATE_ACCOUNT` with your actual storage account name (e.g. `tfstate27164`):
 
 ```hcl
 # main.tf
@@ -405,6 +433,8 @@ resource "azurerm_resource_group" "chaos" {
 }
 ```
 
+Then run from inside the `Azure/` folder:
+
 ```bash
 terraform init
 terraform apply -auto-approve
@@ -416,7 +446,7 @@ Open a second terminal. While the first `apply` is running (or immediately after
 
 ```bash
 # Manually acquire the blob lease to simulate a stuck lock
-STORAGE_ACCOUNT=YOUR_STATE_ACCOUNT
+STORAGE_ACCOUNT=<your-tfstate-account-name>  # e.g. tfstate27164
 BLOB_NAME="lab8/chaos.tfstate"
 
 az storage blob lease acquire \

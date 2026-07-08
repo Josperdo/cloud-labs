@@ -1,6 +1,8 @@
-# AWS Labs & Multi-Cloud Infrastructure
+# SAA-C03: AWS Solutions Architect Associate — Hands-On Labs
 
-A comprehensive AWS learning path designed to make you **interview-ready** in 2 weeks. Four hands-on labs that take you from AWS fundamentals to a production-grade multi-cloud Terraform project.
+A comprehensive AWS learning path designed to make you **interview-ready**. Eight hands-on labs that take you from AWS fundamentals through a production-grade multi-cloud Terraform project, resilient architecture, serverless, cost optimization, and a fully modular Terraform-on-AWS capstone.
+
+> Labs 1–4 were the original AWS fundamentals track. Labs 5–8 extend it with SAA-C03-specific depth: resilience, serverless, cost/performance review, and infrastructure as code.
 
 ---
 
@@ -12,9 +14,13 @@ A comprehensive AWS learning path designed to make you **interview-ready** in 2 
 | **Lab 2** | EC2, Auto Scaling, Load Balancing | 3–4 hours | ~$1–$2 | "Build a scalable web app" |
 | **Lab 3** | S3, Lifecycle Policies, Security | 3–4 hours | ~$0.25 | "How do you optimize cloud storage?" |
 | **Lab 4** | Multi-Cloud Terraform (Capstone) | 4–6 hours | ~$2–$5 | "Show me a portfolio project" |
+| **Lab 5** | Resilient Multi-AZ Architecture (ALB/ASG + RDS Multi-AZ) | 3–4 hours | ~$1–$3 | "Walk me through what happens if an AZ fails" |
+| **Lab 6** | Serverless Architecture (Lambda + API Gateway + DynamoDB) | 3–4 hours | ~$0 | "When would you choose serverless over EC2?" |
+| **Lab 7** | Well-Architected Cost & Performance Review | 2–3 hours | ~$0 | "Tell me about a cost optimization you identified" |
+| **Lab 8** | Terraform on AWS (modules + remote state) | 4–5 hours | ~$0.50–$2 | "How do you structure IaC for reuse?" |
 
-**Total time**: ~15–20 hours  
-**Total cost**: ~$4–$8 (if done sequentially and cleaned up)
+**Total time**: ~26–34 hours
+**Total cost**: ~$5–$13 (if done sequentially and cleaned up)
 
 ---
 
@@ -295,6 +301,72 @@ Every lab follows this format:
 
 ---
 
+### Lab 5: Resilient Multi-AZ Architecture
+
+**You'll do**:
+- Deploy an ALB + ASG spanning two Availability Zones
+- Deploy an RDS Multi-AZ database
+- Force an AZ failure and an RDS failover, and measure the actual downtime
+
+**Interview questions this prepares you for**:
+- "Walk me through what happens if an entire AZ goes down"
+- "What's the difference between an RDS read replica and Multi-AZ?"
+- "How would you design for high availability?"
+
+See: [aws-lab-5-resilient-architecture.md](aws-lab-5-resilient-architecture.md)
+
+---
+
+### Lab 6: Serverless Architecture
+
+**You'll do**:
+- Build a REST API with Lambda, API Gateway, and DynamoDB
+- Scope a Lambda execution role to least privilege
+- Observe cold starts and reason about when serverless is (and isn't) the right call
+
+**Interview questions this prepares you for**:
+- "When would you choose Lambda over EC2?"
+- "How do you scope IAM permissions for a Lambda function?"
+- "What's a cold start and when does it matter?"
+
+See: [aws-lab-6-serverless.md](aws-lab-6-serverless.md)
+
+---
+
+### Lab 7: Well-Architected Cost & Performance Review
+
+**You'll do**:
+- Audit real spend from Labs 1–6 with Cost Explorer
+- Revisit S3 storage classes and lifecycle rules with real pricing numbers
+- Right-size compute using CloudWatch metrics
+- Run a lightweight Well-Architected Framework review
+
+**Interview questions this prepares you for**:
+- "Tell me about a cost optimization you identified"
+- "How do you decide which S3 storage class to use?"
+- "Walk me through the Well-Architected Framework"
+
+See: [aws-lab-7-well-architected-cost.md](aws-lab-7-well-architected-cost.md)
+
+---
+
+### Lab 8: Terraform on AWS
+
+**You'll do**:
+- Set up S3 + DynamoDB remote state with locking
+- Structure networking and compute into reusable Terraform modules
+- Force and recover from a state lock conflict
+- Compare the AWS and Azure Terraform provider patterns directly
+
+**Interview questions this prepares you for**:
+- "How do you structure Terraform for reuse across projects?"
+- "Why use remote state instead of local state?"
+- "What AWS/Azure Terraform differences have you actually run into?"
+
+See: [aws-lab-8-terraform-aws.md](aws-lab-8-terraform-aws.md)
+
+---
+
 ## 🎯 Interview Prep Strategy
 
 ### After Lab 1:
@@ -308,6 +380,18 @@ Every lab follows this format:
 
 ### After Lab 4:
 - Be able to explain: "I built a Terraform project that deploys infrastructure to both Azure and AWS. I used conditional logic to target different clouds with the same code, demonstrating multi-cloud thinking."
+
+### After Lab 5:
+- Be able to explain: "I built a Multi-AZ architecture and actually forced a failover to measure recovery time, instead of just reading about it — RDS failover took about a minute, and the ALB kept serving traffic from the healthy AZ the whole time."
+
+### After Lab 6:
+- Be able to explain: "I built a serverless API with Lambda, API Gateway, and DynamoDB, scoped to a least-privilege execution role, and can explain concretely when I'd choose that over an always-on EC2 architecture."
+
+### After Lab 7:
+- Be able to explain: "I ran a real cost review against my own project using Cost Explorer, found what was actually driving spend, and fixed it — not a hypothetical, a project I can point to."
+
+### After Lab 8:
+- Be able to explain: "I structured my Terraform into reusable networking and compute modules with remote state in S3 and locking via DynamoDB, and I've actually diagnosed and recovered from a state lock conflict."
 
 ---
 
@@ -340,7 +424,7 @@ Every lab follows this format:
 
 ## 📋 Checklist: Am I Ready to Apply?
 
-After all 4 labs:
+After all 8 labs:
 
 - [ ] I can explain VPC networking without reading notes
 - [ ] I can draw a diagram of public/private subnet architecture
@@ -350,6 +434,10 @@ After all 4 labs:
 - [ ] I set up a load balancer
 - [ ] I understand S3 tiers and lifecycle policies
 - [ ] I have a multi-cloud Terraform project on GitHub
+- [ ] I've forced a Multi-AZ failover and can explain the recovery timeline
+- [ ] I built a serverless API and can explain when Lambda beats EC2
+- [ ] I've run a real cost review and found (and fixed) an actual issue
+- [ ] I structured a Terraform project into reusable modules with remote state
 - [ ] My project has a solid README explaining my architecture
 - [ ] I can talk about my projects in technical interviews
 

@@ -398,10 +398,10 @@ az storage container create \
 
 ### Step 1: Set Up a Minimal Terraform Config
 
-Navigate to the `Azure/` folder of this project:
+Navigate to the `Azure/AZ-104/` folder of this project:
 
 ```bash
-cd ~/Desktop/Desktop/Programming/"Cloud & Linux Labs"/Azure
+cd ~/Desktop/Desktop/Programming/"Cloud & Linux Labs"/Azure/AZ-104
 ```
 
 Create or open `main.tf` in your editor and paste the config below, replacing `YOUR_STATE_ACCOUNT` with your actual storage account name (e.g. `tfstate27164`):

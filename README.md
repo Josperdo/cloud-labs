@@ -11,6 +11,8 @@ Hands-on, certification-aligned labs across Azure and AWS — portal work, CLI, 
 | [Azure/AZ-104](Azure/AZ-104/README.md) | AZ-104 — Azure Administrator | Networking, compute, storage, identity, monitoring, Terraform fundamentals, chaos engineering | 8 | Completed |
 | [Azure/AZ-500](Azure/AZ-500/README.md) | AZ-500 — Azure Security Engineer | Identity & access protection, network security, data/app security, security operations + Terraform | 4 | In progress |
 | [Azure/SC-300](Azure/SC-300/README.md) | SC-300 — Identity and Access Administrator | Identity governance, app integration/SSO, access governance, identity protection + Graph automation | 4 | In progress |
+| [Azure/AZ-305](Azure/AZ-305/README.md) | AZ-305 — Azure Solutions Architect Expert | Identity/governance/monitoring design, data storage design, business continuity design, compute + network infrastructure design | 5 | In progress |
+| [Azure/General](Azure/General/README.md) | N/A — certification-agnostic | AKS, Bicep, CI/CD with OIDC, secrets/config management, observability/APM, FinOps, landing zone governance | 7 | In progress |
 | [Aws/SAA-C03](Aws/SAA-C03/README.md) | SAA-C03 — AWS Solutions Architect Associate | VPC/IAM, compute/scaling, storage, resilient architecture, serverless, cost, Terraform | 8 | In progress |
 | [Aws/SCS-C02](Aws/SCS-C02/README.md) | SCS-C02 — AWS Security Specialty | IAM deep dive, detection & monitoring, data protection, automated incident response | 4 | In progress |
 
@@ -19,6 +21,8 @@ Hands-on, certification-aligned labs across Azure and AWS — portal work, CLI, 
 ## Why this structure
 
 Each certification gets its own subfolder so the repo doubles as a study log and a portfolio: a reviewer (or future me) can jump straight to the cert they care about, see exactly what was built, and read the reasoning behind each decision. Labs build on each other within a track — later labs reuse resources, naming conventions, and concepts from earlier ones — and Infrastructure as Code (Terraform) is woven into the tracks where it's actually relevant on the job, rather than bolted on as a separate afterthought.
+
+[Azure/General](Azure/General/README.md) is the one exception to "each track maps to a certification": it's deliberately certification-agnostic, built to cover high-demand Azure skills (Kubernetes, IaC breadth, CI/CD security, observability, FinOps, landing-zone governance) that show up in job postings and interviews but aren't fully tested by any single exam.
 
 ## How to use these labs
 

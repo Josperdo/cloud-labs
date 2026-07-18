@@ -1,4 +1,4 @@
-# Cloud & Linux Labs
+# Cloud Labs
 
 Hands-on, certification-aligned labs across Azure and AWS — portal work, CLI, and Infrastructure as Code — built for reps and interview-readiness, not just theory. Every lab deploys real (cheap, disposable) infrastructure, includes validation checkpoints, and ends with cleanup so nothing lingers on a bill.
 

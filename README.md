@@ -1,16 +1,16 @@
 # Cloud Labs
 
-Hands-on, certification-aligned labs across Azure and AWS — portal work, CLI, and Infrastructure as Code — built for reps and interview-readiness, not just theory. Every lab deploys real (cheap, disposable) infrastructure, includes validation checkpoints, and ends with cleanup so nothing lingers on a bill.
+A collection of hands-on Azure and AWS labs I put together while studying for various certifications. Each lab has you deploy real infrastructure (cheap, disposable stuff), run through validation checks, and clean up at the end so nothing sits there racking up a bill. The goal was to actually build the things these exams test you on, not just read about them.
 
-**88 labs across 11 certification tracks.** Pick the cert you're studying for, work the labs in order, and walk away with something you actually built — not just a score report.
+11 certification tracks, 8 labs apiece, 88 labs total. Grab whichever track matches what you're studying for.
 
 ---
 
 ## Who this is for
 
-Anyone prepping for an Azure or AWS certification who wants to *do* the exam objectives, not just read about them — self-taught learners, career-changers, and working engineers filling gaps before a test. No prior lab-writing or IaC experience assumed; each track's README lists exactly what you need before you start.
+Anyone working toward an Azure or AWS cert who'd rather get hands-on than just memorize exam objectives — self-taught learners, people switching careers into tech, engineers filling in gaps before a test. You don't need prior experience writing IaC or building labs; each track's README spells out what to install first.
 
-This is one person's study log turned into a portfolio, shared in case it's useful to someone else on the same path. It's not official Microsoft or AWS training material, and isn't affiliated with either company — see [Disclaimer](#disclaimer) below.
+This started as my own study log and turned into something I figured might help someone else on the same path. It's not official Microsoft or AWS material, and I'm not affiliated with either company (more on that in the disclaimer below).
 
 ---
 
@@ -39,63 +39,47 @@ This is one person's study log turned into a portfolio, shared in case it's usef
 
 ---
 
-## Suggested learning path
+## Suggested order
 
-Tracks are independent — jump straight to whichever cert you're studying for. If you're building this out roughly in order, this is the dependency chain the labs assume:
+The tracks don't depend on each other, so feel free to jump straight to whatever you're studying for. If you're working through this whole repo, though, here's roughly how it's meant to build:
 
-```
-AZ-104 (Azure fundamentals)
-   │
-   ├──► AZ-500 (security engineering)  ──►  SC-500 (cloud & AI security)
-   ├──► SC-300 (identity administration)
-   ├──► SC-200 (security operations)
-   │
-   └──► AZ-305 (solutions architecture)  ──►  SC-100 (security architecture)
+Start with **AZ-104** for the Azure fundamentals. From there it branches: **AZ-500** (security engineering) leads into **SC-500** (cloud & AI security), **SC-300** covers identity administration, **SC-200** covers security operations, and **AZ-305** (solutions architecture) leads into **SC-100** (security architecture). **AZ-400** and **Azure/General** are more standalone — they layer on top of whichever of the above you've already done. On the AWS side, **SAA-C03** comes before **SCS-C02**, same idea as the Azure fundamentals-then-security progression.
 
-AZ-400 (DevOps) and Azure/General (certification-agnostic skills) layer on top of any of the above.
-
-SAA-C03 (AWS fundamentals) ──► SCS-C02 (AWS security specialty) — parallel AWS track, same structure.
-```
-
-Later labs within a track assume familiarity with concepts from earlier ones — work each track in order.
+Within any single track, work the labs in order — later ones assume you've already got the concepts from earlier ones.
 
 ---
 
-## Why this structure
+## Why it's organized this way
 
-Each certification gets its own subfolder so the repo doubles as a study log and a portfolio: jump straight to the cert you care about, see exactly what was built, and read the reasoning behind each decision. Labs build on each other within a track — later labs reuse resources, naming conventions, and concepts from earlier ones — and Infrastructure as Code (Terraform) is woven into the tracks where it's actually relevant on the job, rather than bolted on as a separate afterthought.
+Each cert gets its own folder so this repo works as both a study log and a portfolio — you can jump straight to the track you care about and see exactly what was built and why. Labs build on each other within a track (later ones reuse resources, naming conventions, and ideas from earlier ones), and Terraform shows up where it's actually relevant to the job rather than being bolted on for its own sake.
 
-[Azure/General](Azure/General/README.md) is the one exception to "each track maps to a certification": it's deliberately certification-agnostic, built to cover high-demand Azure skills (Kubernetes, IaC breadth, CI/CD security, observability, FinOps, landing-zone governance) that show up in job postings and interviews but aren't fully tested by any single exam.
+The one exception is [Azure/General](Azure/General/README.md), which isn't tied to a specific cert. It covers stuff like Kubernetes, IaC beyond Terraform, CI/CD security, and FinOps — skills that show up constantly in job postings but aren't fully tested by any single exam.
 
 ## How to use these labs
 
-1. **Pick a track** based on the certification or skill you're targeting.
-2. **Read that track's README** for prerequisites, the lab overview table, and suggested pacing.
-3. **Work labs in order** — later labs assume familiarity with concepts from earlier ones in the same track.
-4. **Always clean up** at the end of a lab. Every lab includes a cleanup section; skipping it costs real money.
+Pick a track, read its README for prerequisites and pacing, then work the labs in order. Every lab ends with a cleanup step — don't skip it, or you'll end up paying for infrastructure you're not using anymore.
 
-## Prerequisites (all tracks)
+## Before you start
 
-- Azure subscription and/or AWS account with free-tier or trial credit
-- Azure CLI (`az`) and/or AWS CLI (`aws`) installed and authenticated
-- Terraform CLI — install via [terraform.io](https://developer.hashicorp.com/terraform/install)
+- An Azure subscription and/or AWS account (free tier or trial credit is enough)
+- Azure CLI (`az`) and/or AWS CLI (`aws`), authenticated
+- Terraform — [terraform.io](https://developer.hashicorp.com/terraform/install)
 - A terminal and a text editor
-- Basic networking and cloud fundamentals (start with AZ-104 or Aws/SAA-C03 labs 1–3 if you're new to cloud)
+- Basic cloud/networking fundamentals — if you're new to this, start with AZ-104 or the first few SAA-C03 labs
 
-## Cost & safety notes
+## Cost and cleanup
 
-- Every lab targets **$0–$10** and lists an estimated cost up front (a few labs with premium services like Azure Firewall or Security Copilot run higher — flagged explicitly in that track's README)
-- **Delete resource groups / `terraform destroy` at the end of every lab** — don't leave infrastructure running between sessions
-- Labs that intentionally misconfigure something (chaos/incident-response labs) call that out explicitly and always include the fix
-- No real IP addresses, tenant names, account IDs, or credentials are ever committed to this repo — replace placeholders like `<your-subscription-id>` with your own values locally
+Most labs land somewhere between $0 and $10, and each one lists its estimated cost up front (a handful of labs touching pricier services like Azure Firewall or Security Copilot run higher — those are called out explicitly). Delete the resource group or run `terraform destroy` when you're done with a lab; don't leave things running between sessions. A few labs deliberately misconfigure something on purpose (the chaos/incident-response ones) — those always walk you through the fix too.
+
+No real IPs, tenant names, account IDs, or credentials are committed anywhere in here. Placeholders like `<your-subscription-id>` are yours to fill in locally.
 
 ## Contributing
 
-This is primarily a personal study log, but if you spot an error, a broken link, or an outdated CLI flag, feel free to open an issue or a PR — corrections are welcome even if new labs generally aren't being accepted.
+This is mostly a personal study log, but if you find a broken link, a typo, or a CLI flag that's gone stale, open an issue or a PR. I'm not really looking to add new labs from outside contributors, but corrections are always welcome.
 
 ## Disclaimer
 
-This repository is an independent, unofficial study resource. It is not affiliated with, endorsed by, or sponsored by Microsoft or Amazon Web Services. Certification names (AZ-104, AZ-305, AZ-400, AZ-500, SC-100, SC-200, SC-300, SC-500, SAA-C03, SCS-C02, etc.) are trademarks of their respective owners and are used here solely to describe the exam objectives each track targets. Always verify current exam content and study guidance against the official certification pages linked in each track's README.
+This is an independent study resource, not affiliated with or endorsed by Microsoft or AWS. The certification names used throughout (AZ-104, AZ-305, SC-100, SAA-C03, and so on) are trademarks of their respective owners, used here only to describe what each track is studying for. Exam content changes — check the official certification pages (linked in each track's README) for the current word on what's actually tested.
 
 ## License
 

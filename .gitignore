@@ -22,6 +22,8 @@ azuredeploy.parameters.json
 *credentials*
 *secrets*
 *token*
+# ...but never lab content that legitimately has these words in the title (e.g. "lab-4-secrets-config-management.md")
+!*.md
 
 # Screenshots / media
 *.png

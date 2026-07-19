@@ -1,6 +1,6 @@
 # Azure General — Certification-Agnostic Applied Labs
 
-Seven labs covering high-demand Azure skills that show up constantly in job postings and interviews but aren't fully owned by any single certification: Kubernetes (AKS), infrastructure-as-code breadth beyond Terraform, CI/CD with keyless cloud authentication, secrets/config management at scale, application observability, cost governance (FinOps), and enterprise landing-zone patterns.
+Eight labs covering high-demand Azure skills that show up constantly in job postings and interviews but aren't fully owned by any single certification: Kubernetes (AKS), infrastructure-as-code breadth beyond Terraform, CI/CD with keyless cloud authentication, secrets/config management at scale, application observability, cost governance (FinOps), enterprise landing-zone patterns, and container supply-chain security.
 
 This track exists for a specific reason: certifications prove you know the exam's slice of Azure, but hiring managers and ATS keyword scans look for AKS, Bicep, CI/CD, observability, and FinOps by name. These labs are the answer to "what have you actually built with this?" for the keywords that AZ-104/AZ-500/SC-300/[AZ-305](../AZ-305/README.md) don't cover in depth — built to be well-rounded, resume-searchable, and defensible in an interview, not to prep for a specific test.
 
@@ -17,9 +17,10 @@ This track exists for a specific reason: certifications prove you know the exam'
 | **Lab 5** | Observability & Application Performance Monitoring | 60–75 min | ~$0–$1 | Application Insights, distributed tracing, Azure Monitor workbooks, SLO-style alerting |
 | **Lab 6** | Cost Management & FinOps | 45–60 min | ~$0 | Budgets/cost alerts, Azure Advisor, tagging for cost allocation, rightsizing |
 | **Lab 7** | Landing Zone & Governance at Scale | 60–75 min | ~$0 | Cloud Adoption Framework landing zones, Policy initiatives at scale, policy-as-code |
+| **Lab 8** | Container Supply-Chain Security | 90–110 min | ~$1–$4 | ACR + Defender for Containers scanning, SBOM generation, Notation image signing with Key Vault, AKS admission control on unsigned images |
 
-**Total time**: ~7–8 hours
-**Total cost**: ~$1–$5 if done sequentially and cleaned up after each lab (Lab 1's AKS node pool is the only hourly-billed resource — delete the cluster the same session)
+**Total time**: ~8.5–9.5 hours
+**Total cost**: ~$2–$9 if done sequentially and cleaned up after each lab (Lab 1's AKS node pool is the only hourly-billed resource that spans multiple labs — delete the cluster the same session you finish Lab 8, since Lab 8 reuses it)
 
 ---
 
@@ -40,6 +41,7 @@ Labs are independent of each other in concept but loosely build infrastructure y
 
 - **Targeting DevOps/platform or security engineer roles?** Labs 1, 3, and 4 are the strongest resume/interview trio — containers, keyless CI/CD, and secrets management are three of the most-screened-for keywords in current job postings.
 - **Want a FinOps or cost-optimization talking point?** Lab 6 is short and self-contained — good for rounding out an interview answer about "how do you keep cloud spend under control."
+- **Want a supply-chain security talking point?** Lab 8 closes the loop on Lab 1's AKS cluster — SBOM generation and Notation image signing are increasingly asked about directly, post-SolarWinds/xz-utils, in security engineer interviews.
 - **Prepping for a platform/architecture-adjacent interview?** Lab 7's landing-zone lab pairs well with [AZ-305 Lab 1](../AZ-305/lab-1-identity-governance-monitoring-design.md) — one is design theory, the other is the CAF terminology and policy-as-code pattern hiring managers expect you to know by name.
 
 ---

@@ -92,7 +92,7 @@ Three tags cover most cost-allocation needs: who pays for it, what environment i
 |-----|---------------|---------|
 | `costCenter` | `IT-1000` | Which budget line this resource bills against |
 | `environment` | `prod`, `nonprod` | Separates production spend from dev/test noise in reports |
-| `owner` | `john.sperry` | Who to contact before deleting or resizing this resource |
+| `owner` | `<team-alias>` | Who to contact before deleting or resizing this resource |
 
 ### Step 6: Tag Existing Resources
 ```bash

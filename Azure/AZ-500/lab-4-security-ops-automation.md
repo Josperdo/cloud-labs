@@ -272,4 +272,4 @@ az group show --name az500-baseline-rg 2>&1 | grep -i "could not be found" && ec
 - Extend the Sentinel rule from Step 8 to also alert on break-glass account sign-ins (from [Lab 1](lab-1-identity-access-protection.md)) and Key Vault secret access from unexpected identities (from [Lab 3](lab-3-data-app-security.md))
 - Add `azurerm_security_center_subscription_pricing` resources for the other Defender plans (VirtualMachines, KeyVaults, AppServices) to the Terraform baseline
 - Look into Sentinel automation rules and playbooks (Logic Apps) to auto-remediate low-severity incidents instead of just alerting on them
-- This closes out the AZ-500 track — continue to [SC-300](../SC-300/README.md) for deeper identity governance, or [AWS SCS-C02](../../Aws/SCS-C02/README.md) to build the equivalent security-operations muscle in AWS
+- Continue to [Lab 5: Hybrid Identity & Azure AD Connect Security](lab-5-hybrid-identity-adconnect.md) to extend this operations baseline to the on-prem/cloud identity bridge and its Tier-0 hardening requirements

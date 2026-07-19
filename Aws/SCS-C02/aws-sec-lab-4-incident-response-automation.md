@@ -300,4 +300,5 @@ aws s3 rb s3://$TEST_BUCKET --force
 - Add an SNS notification to the Lambda so security team members are notified when an auto-remediation fires (visibility even when action is automatic)
 - Extend the pattern to a second finding type (e.g., an unencrypted EBS volume, a security group with `0.0.0.0/0` on port 22)
 - Add a DynamoDB table logging every remediation event with a timestamp, for the audit trail a real incident response program requires
-- This closes out the SCS-C02 track — for the equivalent automated-remediation pattern in Azure, see [AZ-500 Lab 4](../../Azure/AZ-500/lab-4-security-ops-automation.md), and compare Sentinel's playbook/automation-rule model against this EventBridge + Lambda pattern directly
+- Continue to [Lab 5: Network & Perimeter Security](aws-sec-lab-5-network-perimeter-security.md) — this lab automated remediation for a single misconfiguration type; Lab 5 builds the network-layer controls (security groups, Network Firewall, WAF) that reduce how many other misconfiguration types exist to remediate in the first place
+- For the equivalent automated-remediation pattern in Azure, see [AZ-500 Lab 4](../../Azure/AZ-500/lab-4-security-ops-automation.md), and compare Sentinel's playbook/automation-rule model against this EventBridge + Lambda pattern directly

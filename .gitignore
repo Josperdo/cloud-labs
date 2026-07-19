@@ -2,6 +2,13 @@
 notes/
 *.tmp
 *.bak
+tasks/
+CLAUDE.md
+lessons.md
+
+# Claude Code local-only settings (machine-specific paths/permissions)
+.claude/settings.local.json
+.claude/scheduled_tasks.lock
 
 # Azure exports and configs (may contain sensitive data)
 *.env

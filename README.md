@@ -1,6 +1,6 @@
 # Cloud Labs
 
-A collection of hands-on Azure and AWS labs I put together while studying for various certifications [or just in general). Each lab has you deploy real infrastructure (cheap, disposable stuff), run through validation checks, and clean up at the end so nothing sits there racking up a bill. The goal was to actually build the things these exams test you on, not just read about them.
+A collection of hands-on Azure and AWS labs to assist in preperation for various certifications [or just in general]. Each lab has you deploy real infrastructure (cheap, disposable stuff), run through validation checks, and clean up at the end so nothing sits there racking up a bill. The goal was to actually build the things these exams test you on, not just read about them.
 
 11 certification tracks, 8 labs apiece, 88 labs total. Grab whichever track matches what you're studying for.
 
@@ -8,9 +8,9 @@ A collection of hands-on Azure and AWS labs I put together while studying for va
 
 ## Who this is for
 
-Anyone working toward an Azure or AWS cert who'd rather get hands-on than just memorize exam objectives — self-taught learners, people switching careers into tech, engineers filling in gaps before a test. You don't need prior experience writing IaC or building labs; each track's README spells out what to install first.
+Anyone working toward an Azure or AWS cert who'd rather get hands-on than just memorize exam objectives: self-taught learners, people switching careers into tech, engineers filling in gaps before a test. You don't need prior experience writing IaC or building labs; each track's README spells out what to install first.
 
-This started as my own study log and turned into something I figured might help someone else on the same path. It's not official Microsoft or AWS material, and I'm not affiliated with either company (more on that in the disclaimer below).
+It's not official Microsoft or AWS material, and I'm not affiliated with either company (more on that in the disclaimer below).
 
 ---
 
@@ -51,13 +51,13 @@ Within any single track, work the labs in order — later ones assume you've alr
 
 ## Why it's organized this way
 
-Each cert gets its own folder so this repo works as both a study log and a portfolio — you can jump straight to the track you care about and see exactly what was built and why. Labs build on each other within a track (later ones reuse resources, naming conventions, and ideas from earlier ones), and Terraform shows up where it's actually relevant to the job rather than being bolted on for its own sake.
+Each cert gets its own folder so this repo works as both a study log and a portfolio, you can jump straight to the track you care about and see exactly what was built and why. Labs build on each other within a track (later ones reuse resources, naming conventions, and ideas from earlier ones), and Terraform shows up where it's actually relevant to the job rather than being bolted on for its own sake.
 
-The one exception is [Azure/General](Azure/General/README.md), which isn't tied to a specific cert. It covers stuff like Kubernetes, IaC beyond Terraform, CI/CD security, and FinOps — skills that show up constantly in job postings but aren't fully tested by any single exam.
+The one exception is [Azure/General](Azure/General/README.md), which isn't tied to a specific cert. It covers stuff like Kubernetes, IaC beyond Terraform, CI/CD security, and FinOps. The skills that show up constantly in job postings but aren't fully tested by any single exam.
 
 ## How to use these labs
 
-Pick a track, read its README for prerequisites and pacing, then work the labs in order. Every lab ends with a cleanup step — don't skip it, or you'll end up paying for infrastructure you're not using anymore.
+Pick a track, read its README for prerequisites and pacing, then work the labs in order. Every lab ends with a cleanup step. Don't skip it, or you'll end up paying for infrastructure you're not using anymore.
 
 ## Before you start
 
@@ -72,10 +72,6 @@ Pick a track, read its README for prerequisites and pacing, then work the labs i
 Most labs land somewhere between $0 and $10, and each one lists its estimated cost up front (a handful of labs touching pricier services like Azure Firewall or Security Copilot run higher — those are called out explicitly). Delete the resource group or run `terraform destroy` when you're done with a lab; don't leave things running between sessions. A few labs deliberately misconfigure something on purpose (the chaos/incident-response ones) — those always walk you through the fix too.
 
 No real IPs, tenant names, account IDs, or credentials are committed anywhere in here. Placeholders like `<your-subscription-id>` are yours to fill in locally.
-
-## Contributing
-
-This is mostly a personal study log, but if you find a broken link, a typo, or a CLI flag that's gone stale, open an issue or a PR. I'm not really looking to add new labs from outside contributors, but corrections are always welcome.
 
 ## Disclaimer
 

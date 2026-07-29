@@ -1,6 +1,10 @@
 # Cloud Labs
 
+<<<<<<< HEAD
 A collection of hands-on Azure and AWS labs to assist in preperation for various certifications [or just in general]. Each lab has you deploy real infrastructure (cheap, disposable stuff), run through validation checks, and clean up at the end so nothing sits there racking up a bill. The goal was to actually build the things these exams test you on, not just read about them.
+=======
+A collection of hands-on Azure and AWS labs I put together while studying for various certifications [or just in general]. Each lab has you deploy real infrastructure (cheap, disposable stuff), run through validation checks, and clean up at the end so nothing sits there racking up a bill. The goal was to actually build the things these exams test you on, not just read about them.
+>>>>>>> 11aabac27168806f5b6b547bcd14df1d957cdce0
 
 11 certification tracks, 8 labs apiece, 88 labs total. Grab whichever track matches what you're studying for.
 

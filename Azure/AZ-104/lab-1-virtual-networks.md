@@ -1,6 +1,6 @@
 # Lab 1: Virtual Networks — Laying Out a New Application Environment
 
-Check box if done: [x]
+Check box if done: [ ]
 
 ## Overview
 Before any servers or services get deployed, the network needs to exist. As a cloud engineer, setting up a VNet is often the first thing you do when starting a new project. Done right, the network enforces security boundaries so your database tier can't be reached directly from the internet even if something else is misconfigured. This lab walks through creating a properly segmented network, locking down inter-tier traffic, and connecting it to a dev environment.
